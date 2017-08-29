@@ -49,7 +49,7 @@ def error(err_msg):
 def adtuodi(days):
     title=u'托底'
     # xvalue=['Acccc','B','C','d']
-    # dat=[1000,1200,1300,1000]
+    # dat=[1000,1200,1300,1000,4000]
     xvalue,dat,tmpsqllist=r.mydb(days)
     # return "ttttttt"
     return render_template('highchartsline.html',xvalue=xvalue,title=title,data=dat,tmpsqllist=tmpsqllist)
