@@ -1,0 +1,16 @@
+<html>
+<script type="text/javascript"></script>
+ <head>
+  {% if title %}
+  <title>{{title}} - microblog</title>
+  {% else %}
+  <title>microblog</title>
+  {% endif %}
+ </head>
+ <body>
+  <h1>日志列表</h1>
+  {% for file in filelist %}
+  <p><a  href="/monitor/yiqifahoutai/{{file}}">{{ file }}</a> </p>
+  {% endfor %}
+ </body>
+</html>
