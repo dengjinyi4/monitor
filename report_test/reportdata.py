@@ -51,6 +51,8 @@ def mydb(days):
     db.close()
     return daylist,count,sqllist
 if __name__ == '__main__':
+    print
 
-    print mydb()
+    # print mydb()
+
 

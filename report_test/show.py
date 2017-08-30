@@ -5,6 +5,7 @@ from flask import Flask,request,render_template
 import os,json
 import houtai as ht
 import reportdata as r
+import tuodi_day_order as myorder
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
 APP_STATIC_TXT = os.path.join(APP_ROOT, 'txt') #设置一个专门的类似全局变量的东西
 app = Flask(__name__)
@@ -49,10 +50,21 @@ def error(err_msg):
 def adtuodi(days):
     title=u'托底'
     # xvalue=['Acccc','B','C','d']
-    # dat=[1000,1200,1300,1000,4000]
+    # dat=[1000,1200,1300,1000]
     xvalue,dat,tmpsqllist=r.mydb(days)
     # return "ttttttt"
     return render_template('highchartsline.html',xvalue=xvalue,title=title,data=dat,tmpsqllist=tmpsqllist)
+# 托底广告订单按照时间分布
+@app.route('/adtuodiorder/')
+def adtuodiorder():
+    title=u'托底订单按照时间分布'
+    # xvalue=['Acccc','B','C','d']
+    # dat=[1000,1200,1300,1000]
+    day=request.args.get('day')
+    order=request.args.get('order')
+    xvalue,dat,tmpsqllist,adtuodi_order,adtuodi_order_count=myorder.mydb(int(day),int(order))
+    # return "ttttttt%s，%s"%(str(day),str(order))
+    return render_template('tuodi_day_order.html',xvalue=xvalue,title=title,data=dat,tmpsqllist=tmpsqllist,adtuodi_order=adtuodi_order,adtuodi_order_count=adtuodi_order_count)
 @app.route('/index1')
 def index():
   user = { 'nickname': 'Miguel' } # fake user
