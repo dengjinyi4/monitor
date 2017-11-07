@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>report</title>
+<!--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>-->
+<script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='highcharts.js') }}"></script>
+</head>
+<body>
+<p hidden="hidden">
+报表功能：广告主为153的每天展现次数
+http://172.16.17.187:21312/adtuodi1/5
+参数说明：
+5 为当天连续往前推五天，算当天
+
+</p>
+<p hidden="hidden">查询语句是：{{tmpsqllist}}</p>
+<p hidden="hidden">展示个数个数是：{{data}}</p>
+<p hidden="hidden">天数是：{{xvalue}}</p>
+<form action="{{url_for('hdtmonitor')}}" method="post">
+    <table>
+        <tbody>
+        <tr>
+            <td>请选择任务：</td>
+            <td>
+                <select name="jobid">
+                    <option value="44">展现/抽奖</option>
+                    <option value="45">谢谢参与次数</option>
+                    <option value="46">托底广告次数</option>
+                    <option value="47">点击/展现</option>
+                    <option value="48">负数个数/总个数</option>
+                </select>
+            </td>
+            <td>N天之前 :</td>
+            <td><input name="myday" type="number"></td>
+             <td><input type="submit" value="生成报表"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p align="center"></p>
+</form>
+
+<div id="container" style="width: 1300px; height: 400px; margin: 0 auto"></div>
+<script language="JavaScript">
+$(document).ready(function() {
+   var chart = {
+      type: 'spline'
+   };
+   var title = {
+      text: '{{mytitle|safe}}'
+   };
+   var subtitle = {
+      text: ''
+   };
+   var xAxis = {
+      categories: {{xvalue|safe}}
+   };
+   var yAxis = {
+      title: {
+         text: 'time'
+      },
+      labels: {
+         formatter: function () {
+            return this.value ;
+         }
+      },
+      lineWidth: 2
+   };
+   var tooltip = {
+      crosshairs: true,
+      shared: true
+   };
+   var plotOptions = {
+      spline: {
+         marker: {
+            radius: 4,
+            lineColor: '#666666',
+            lineWidth: 1
+         }
+      }
+   };
+   var series= [{name: 'count',
+                marker: {symbol: 'square'},
+                data:{{data|safe}}}];
+
+   var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.subtitle = subtitle;
+   json.tooltip = tooltip;
+   json.xAxis = xAxis;
+   json.yAxis = yAxis;
+   json.series = series;
+   json.plotOptions = plotOptions;
+   $('#container').highcharts(json);
+
+});
+</script>
+</body>
+</html>
