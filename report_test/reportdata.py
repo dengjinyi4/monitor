@@ -30,7 +30,7 @@ def tmpsqllist(days):
     daylist=tmpdaylist(days)
     tmpsqllist=[]
     for d in daylist:
-        tmpsql='select count(*) from ad_show_log'+d+' where advertiser_id=153 GROUP BY advertiser_id'
+        tmpsql='select count(*) from ad_show_log'+d+' where advertiser_id=153 and  position_id <>0 GROUP BY advertiser_id'
         tmpsqllist.append(tmpsql)
     return daylist,tmpsqllist
 def mydb(days):
@@ -51,7 +51,7 @@ def mydb(days):
     db.close()
     return daylist,count,sqllist
 if __name__ == '__main__':
-    print
+    print tmpsqllist(10)
 
     # print mydb()
 
