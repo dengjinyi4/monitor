@@ -95,22 +95,28 @@ def hdtmonitor():
         # print days
         return render_template('hdtmonitor.html')
     else:
+        if request.form.get('myday')=='':
+             days=0
+        else:
+            days=int(request.form.get('myday'))
         jobid=request.form.get('jobid')
         mytitle=''
         if jobid=='44':
             mytitle=u'展现/抽奖'
-        elif jobid=='45':
-            mytitle=u'谢谢参与次'
+        # elif jobid=='45':
+        #     mytitle=u'谢谢参与次'
         elif jobid=='46':
             mytitle=u'托底广告次数'
         elif jobid=='47':
             mytitle=u'点击/展现'
         elif jobid=='48':
             mytitle=u'负数个数/总个数'
-        if request.form.get('myday')=='':
-            days=0
-        else:
-            days=int(request.form.get('myday'))
+        elif jobid=='45':
+            mytitlemedia=u'谢谢参与数媒体分布'
+            mytitle=u'谢谢参与次'
+            xvaluemedia,datamedia=m.mymedia(days)
+            xvalue,dat,tmpsqllist=m.mydb(days,jobid)
+            return render_template('hdtmonitor.html',xvalue=xvalue,mytitle=mytitle,data=dat,tmpsqllist=tmpsqllist,xvaluemedia=xvaluemedia,mytitlemedia=mytitlemedia,datamedia=datamedia)
         xvalue,dat,tmpsqllist=m.mydb(days,jobid)
         return render_template('hdtmonitor.html',xvalue=xvalue,mytitle=mytitle,data=dat,tmpsqllist=tmpsqllist)
 

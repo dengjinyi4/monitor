@@ -1,4 +1,7 @@
 #encoding:utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import MySQLdb as mysql,time,datetime
 
 def tmpdaylist(days):
@@ -19,6 +22,18 @@ def tmpsqllist(days,job_id):
     tmpsqllist.append(tmpsql)
     (leftthreshold,rightthreshold)=mythreshold(job_id)
     return tmpsqllist,leftthreshold,rightthreshold
+def mediasql(days):
+    day=tmpdaylist(days)
+    day=day.replace('-','')
+    tmpsql='''SELECT l.media_id, m.media_name, COUNT(*)
+    FROM voyagerlog.lottery_click_log'''+day+''' l
+	INNER JOIN voyager.base_media_info m ON l.media_id = m.id
+    WHERE l.act_award_type = 6
+    GROUP BY l.media_id
+    HAVING COUNT(*) > 1000
+    ORDER BY COUNT(*) DESC'''
+    print tmpsql
+    return tmpsql
 def mythreshold(jobid):
     if jobid=='44':
         return 90,100
@@ -30,6 +45,35 @@ def mythreshold(jobid):
         return 10,100
     elif jobid=='48':
         return 0,10
+def mycursor():
+    db = mysql.connect(host='123.59.17.121',user='voyager',passwd='SIkxiJI5r48JIvPh',db='voyagerlog',port=3306,charset='utf8')
+    db.autocommit(True)
+    c = db.cursor()
+    # db.close()
+    return c
+def mymedia(days):
+    mycur=mycursor()
+    # sql='''SELECT l.media_id, m.media_name, COUNT(*)
+    # FROM voyagerlog.lottery_click_log20171108 l
+    # INNER JOIN voyager.base_media_info m ON l.media_id = m.id
+    # WHERE l.act_award_type = 6
+    # GROUP BY l.media_id
+    # HAVING COUNT(*) > 1000
+    # ORDER BY COUNT(*) DESC'''
+    sql=mediasql(days)
+    # 返回横坐标的数据 时间
+    xcount=[]
+    # 返回纵坐标 监控数据
+    yclist=[]
+    mycur.execute(sql)
+    re=mycur.fetchall()
+    for i in re:
+        xcount.append(int(i[0]))
+        yclist.append(int(i[2]))
+    print xcount
+    print yclist
+    mycur.close()
+    return xcount,yclist
 def mydb(days,job_id):
     db = mysql.connect(host='123.59.17.246',user='egou_read',passwd='urm8cq9fey7gapnn',db='monitor',port=3306,charset='utf8')
     db.autocommit(True)
@@ -63,7 +107,7 @@ def mydb(days,job_id):
 if __name__ == '__main__':
     # mydb(2)
 
-    print  tmpdaylist(0)
+    print  mymedia(0)
 
 
 
