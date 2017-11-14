@@ -3,9 +3,16 @@
 <meta charset="UTF-8" />
 <title>report</title>
 <!--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>-->
+<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='highcharts.js') }}"></script>
+<script src="{{ url_for('static', filename='drilldown.js') }}"></script>
+<script src="{{ url_for('static', filename='data.js') }}"></script>-->
+
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/drilldown.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
 </head>
 <body>
 <p hidden="hidden">
@@ -30,10 +37,13 @@ http://172.16.17.187:21312/adtuodi1/5
                     <option value="46">托底广告次数</option>
                     <option value="47">点击/展现</option>
                     <option value="48">负数个数/总个数</option>
+                    <option value="100">媒体中广告位谢谢参与汇总</option>
                 </select>
             </td>
             <td>N天之前 :</td>
             <td><input name="myday" type="number"></td>
+            <td>媒体id :</td>
+            <td><input name="mymediaid" type="number"></td>
              <td><input type="submit" value="生成报表"></td>
         </tr>
         </tbody>
@@ -110,7 +120,7 @@ $(document).ready(function() {
       text: 'Source: runoob.com'
    };
    var xAxis = {
-      categories: {{xvaluemedia}},
+      categories: {{xvaluemedia|safe}},
       crosshair: true
    };
    var yAxis = {
@@ -156,5 +166,114 @@ $(document).ready(function() {
 
 });
 </script>
+<!--
+<div id="container2" style="width: 1300px; height: 400px; margin: 0 auto"></div>
+<script language="JavaScript">
+
+// Create the chart
+Highcharts.chart('container2', {
+    chart: {
+        type: 'column',//纵型柱状图，column为横向柱状图
+        events: {
+            drilldown: function (e) {
+                if (!e.seriesOptions) {
+                    var chart = this,
+                        drilldowns = {
+                            'Animals': {
+                                id:'Animalsid',
+                                name: 'Animals',
+                                data: [
+                                    ['Cows', 2],
+                                    ['Sheep', 3],
+                                    ['Sheep1', 2]
+                                ]
+                            },
+                            'Fruits': {
+                                id:'Fruitsid',
+                                name: 'Fruits',
+                                data: [
+                                    ['Apples', 5],
+                                    ['Oranges', 7],
+                                    ['Bananas', 2]
+                                ]
+                            },
+                            'Cars': {
+                                id:'Carsid',
+                                name: 'Cars',
+                                data: [
+                                    ['Toyota', 1],
+                                    ['Volkswagen', 2],
+                                    ['Opel', 5]
+                                ]
+                            }
+                        },
+                        series = drilldowns[e.point.name];
+
+                    // Show the loading label
+                    chart.showLoading('Simulating Ajax ...');
+
+                    setTimeout(function () {
+                        chart.hideLoading();
+                        chart.addSeriesAsDrilldown(e.point, series);
+                    }, 1000);
+                }
+
+            }
+
+        }
+    },
+    title: {
+        text: 'Async drilldown'
+    },
+    xAxis: {
+        type: 'category'
+    },
+
+    legend: {
+        enabled: false
+    },
+
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true
+            },
+            events:{
+            click:function(e){//点击事件
+                if(e.point.drilldown!=true){//如果不等于true表明是钻取到了最低层的图表
+                    window.location.href='detailChart.html';
+                }
+
+                }
+             }
+        }
+
+    },
+
+    series: [{
+        name: 'Things',
+        colorByPoint: true,
+        data: [{
+            name: 'Animals',
+            y: 7,
+            drilldown: true
+        }, {
+            name: 'Fruits',
+            y: 2,
+            drilldown: true
+        }, {
+            name: 'Cars',
+            y: 4,
+            drilldown: true
+        }]
+    }],
+
+    drilldown: {
+        series: []
+    }
+});
+</script>-->
+
 </body>
 </html>

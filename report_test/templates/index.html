@@ -5,10 +5,10 @@
         <title>First</title>
     </head>
          <frameset cols="15%,*">
-         <frame src="link.html" name="home"/>
-         <frame src="login.html" name="index1"/>
+         <frame src="{{url_for('link')}}" name="index1"/>
+         <!--<frame src="link.html" name="index1"/>-->
+         <frame src="{{url_for('summary')}}" name="home"/>
             </frameset>
-        
             <noframes>
                 <body>
                 你的浏览器不支持frame

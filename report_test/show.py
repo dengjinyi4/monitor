@@ -76,11 +76,14 @@ def testhightchar():
     (xvalue,data,sql)=tuodi_oneviw.mydbnew(int(day),str(advertiser_id))
     print xvalue,data
     return render_template('ad_by_advertiser_id.html',xvalue=xvalue,d=data,sql=sql)
-@app.route('/index1')
+@app.route('/')
 def index():
     print 'ok'
     return render_template("index.html")
-
+@app.route('/summary/')
+# 简介介绍
+def summary():
+    return render_template('summary.html')
 @app.route('/flistok', methods=['GET'])
 def flistok():
     path=r'd:'
@@ -114,11 +117,20 @@ def hdtmonitor():
         elif jobid=='45':
             mytitlemedia=u'谢谢参与数媒体分布'
             mytitle=u'谢谢参与次'
-            xvaluemedia,datamedia=m.mymedia(days)
+            xvaluemedia,datamedia=m.mymedia(days,'media_id','0')
             xvalue,dat,tmpsqllist=m.mydb(days,jobid)
             return render_template('hdtmonitor.html',xvalue=xvalue,mytitle=mytitle,data=dat,tmpsqllist=tmpsqllist,xvaluemedia=xvaluemedia,mytitlemedia=mytitlemedia,datamedia=datamedia)
+        elif jobid=='100':
+            mytitlemedia=u'媒体中广告位谢谢参与汇总'
+            mediaid=str(request.form.get('mymediaid'))
+            xvaluemedia,datamedia=m.mymedia(days,'adzone_id',mediaid)
+            return render_template('hdtmonitor.html',xvaluemedia=xvaluemedia,mytitlemedia=mytitlemedia,datamedia=datamedia)
+
         xvalue,dat,tmpsqllist=m.mydb(days,jobid)
         return render_template('hdtmonitor.html',xvalue=xvalue,mytitle=mytitle,data=dat,tmpsqllist=tmpsqllist)
+@app.route('/link/')
+def link():
+    return render_template('link.html')
 
 if __name__ == '__main__':
     app.run( host="0.0.0.0",port=21312,debug=True)
