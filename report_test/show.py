@@ -8,6 +8,7 @@ import reportdata as r
 import tuodi_oneviw as tuodi_oneviw
 import tuodi_day_order as myorder
 import hdtmonitor as m
+import hdt_cssc as cssc
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
 APP_STATIC_TXT = os.path.join(APP_ROOT, 'txt') #设置一个专门的类似全局变量的东西
 app = Flask(__name__)
@@ -131,6 +132,24 @@ def hdtmonitor():
 @app.route('/link/')
 def link():
     return render_template('link.html')
-
+@app.route('/hdt_cssc/',methods=['GET','POST'])
+def hdt_cssc():
+    if request.method=='GET':
+        # alladzon=((59L, 101L, '172.16.145.55', 55L, None, 69L, 69L),(59L, 101L, '172.16.145.55', 55L, None, 69L, 69L))
+        # for trcout in alladzon:
+        #     print trcout
+        return render_template('hdt_cssc.html')
+    else:
+        dbtype=request.form.get('dbtype')
+        adzone_click_id=request.form.get('adzone_click_id')
+        if request.form.get('myday')=='':
+             days=0
+        else:
+            days=int(request.form.get('myday'))
+        alladzon=cssc.mydata(days,dbtype,'adzon',adzone_click_id)
+        alllottery=cssc.mydata(days,dbtype,'lottery',adzone_click_id)
+        allshow=cssc.mydata(days,dbtype,'show',adzone_click_id)
+        allclick=cssc.mydata(days,dbtype,'click',adzone_click_id)
+        return render_template('hdt_cssc.html',alladzon=alladzon,alllottery=alllottery,allshow=allshow,allclick=allclick)
 if __name__ == '__main__':
     app.run( host="0.0.0.0",port=21312,debug=True)
