@@ -43,9 +43,6 @@ def mydata(days,dbtype,tabletype,adzone_click_id):
     return result
     # return '111'
 if __name__ == '__main__':
-    # print tmpdaylist(0)
-    # print tmpsqllist(0,'adzon','ddddd')
-    # print mydata(1,'test','adzon','B3W1CD6H1HKEFU6729')
     myc=mycursor('test1')
     sql=r"SELECT create_time  from voyagerlog.lottery_click_log20171121 where adzone_click_id='B0H2DDC11HKH9UK4N6';"
     myc.execute(sql)

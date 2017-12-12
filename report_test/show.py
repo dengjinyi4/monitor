@@ -2,7 +2,7 @@
 #encoding: utf-8
 from flask import Flask,jsonify,abort,Response
 from flask import Flask,request,render_template
-import os,json
+import os,json,sys
 import houtai as ht
 import reportdata as r
 import tuodi_oneviw as tuodi_oneviw
@@ -151,5 +151,21 @@ def hdt_cssc():
         allshow=cssc.mydata(days,dbtype,'show',adzone_click_id)
         allclick=cssc.mydata(days,dbtype,'click',adzone_click_id)
         return render_template('hdt_cssc.html',alladzon=alladzon,alllottery=alllottery,allshow=allshow,allclick=allclick)
+@app.route('/hdtapi/',methods=['GET','POST'])
+def hdtapi():
+    if request.method=='GET':
+        print 1111111111
+        return render_template('allapi.html')
+    else:
+        jobid=request.form.get('jobid')
+        cmd='''python D:\\work\\auto\\Voyager\\all_tests.py'''
+        # cmd='''python all_tests.py'''
+        if jobid=='100':
+            try:
+                os.system(cmd)
+            except Exception as e:
+                print e.message
+        return render_template('allapi.html')
+
 if __name__ == '__main__':
     app.run( host="0.0.0.0",port=21312,debug=True)
