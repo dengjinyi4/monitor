@@ -19,7 +19,7 @@ def tmpsqllist(days):
     tmpsqllist.append(tmpsql)
     return tmpsqllist,day
 def mydb(days,adorder):
-    db = mysql.connect(host='123.59.17.121',user='voyager',passwd='SIkxiJI5r48JIvPh',db='voyagerlog',port=3306,charset='utf8')
+    db = mysql.connect(host='123.59.17.42',user='voyager',passwd='SIkxiJI5r48JIvPh',db='voyagerlog',port=3306,charset='utf8')
     db.autocommit(True)
     c = db.cursor()
     # 返回的数据-前端显示执行的sql
@@ -42,6 +42,7 @@ def mydb(days,adorder):
         adtuodi_order_count.append(int(i[1]))
     # for adorder in adtuodi_order:
     tmpsql='SELECT LEFT( create_time, 13 ),ad_order_id,COUNT(*) FROM ad_show_log'+day+' WHERE ad_order_id='+str(adorder)+'  GROUP BY LEFT( create_time, 13 ) order by LEFT( create_time, 13 );'
+    print tmpsql
     sqllist.append(tmpsql)
     c.execute(tmpsql)
     print tmpsql

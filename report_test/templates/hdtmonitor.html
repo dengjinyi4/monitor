@@ -38,6 +38,7 @@ http://172.16.17.187:21312/adtuodi1/5
                     <option value="47">点击/展现</option>
                     <option value="48">负数个数/总个数</option>
                     <option value="100">媒体中广告位谢谢参与汇总</option>
+                    <option value="110">缓存中的订单预算：生产</option>
                 </select>
             </td>
             <td>N天之前 :</td>
@@ -274,6 +275,10 @@ Highcharts.chart('container2', {
     }
 });
 </script>-->
+<li>缓存中的订单为：</li>
+{% for i in mybudget %}
+<li>订单是：{{i|safe}} 金额为：{{mybudget[i]|safe}}</li>
+  {% endfor %}
 
 </body>
 </html>

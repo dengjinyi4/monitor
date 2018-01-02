@@ -21,7 +21,7 @@ def tmpsqllist(days,type,adzone_click_id):
     elif type=='show':
         tmpsql="SELECT ad_choosen_tag,media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,advertiser_id from voyagerlog.ad_show_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
     elif type=='click':
-        tmpsql="SELECT media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,charge_amount,advertiser_id,occurrence,status,click_source,invalid_message from voyagerlog.ad_click_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
+        tmpsql="SELECT media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,charge_amount,advertiser_id,occurrence,status,click_source,invalid_message,media_income,system_income from voyagerlog.ad_click_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
     # tmpsqllist.append(tmpsql)
     print tmpsql
     return tmpsql

@@ -10,10 +10,10 @@
  <body>
   <h1>Hi,瞅瞅吧 ConnectTimeoutError!</h1>
   {% for post in posts %}
-  {% if post|length>180 %}
+  {% if post|length>80 %}
   <p ><font color="red" >{{post}}{{post|length}}</font></p>
   {% else %}
-  <p>{{post}}</p>
+  <p>{{post}} </p>
   {% endif %}
   {% endfor %}
  </body>

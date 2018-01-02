@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #encoding: utf-8
 from flask import Flask,jsonify,abort,Response
-from flask import Flask,request,render_template
+from flask import Flask,request,render_template,url_for,redirect,flash
+import requests
 import os,json,sys
 import houtai as ht
 import reportdata as r
@@ -9,10 +10,16 @@ import tuodi_oneviw as tuodi_oneviw
 import tuodi_day_order as myorder
 import hdtmonitor as m
 import hdt_cssc as cssc
+import myredis as mr
+# import formclass.formonline as myclass
+# from formclass.formonline import *
+# from flask.ext.bootstrap import Bootstrap
+
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))   # refers to application_top
 APP_STATIC_TXT = os.path.join(APP_ROOT, 'txt') #设置一个专门的类似全局变量的东西
 app = Flask(__name__)
-app.jinja_env.add_extension("chartkick.ext.charts")
+# app.jinja_env.add_extension("chartkick.ext.charts")
+# app.config.from_object('config')
 
 @app.route('/monitor/yiqifahoutaif/<fname>', methods=['GET'])
 def yiqifa_houtai1(fname):
@@ -126,7 +133,10 @@ def hdtmonitor():
             mediaid=str(request.form.get('mymediaid'))
             xvaluemedia,datamedia=m.mymedia(days,'adzone_id',mediaid)
             return render_template('hdtmonitor.html',xvaluemedia=xvaluemedia,mytitlemedia=mytitlemedia,datamedia=datamedia)
-
+        elif jobid=='110':
+            redis_nodes=[{"host":'123.59.17.118',"port":'13601'},{"host":'123.59.17.85',"port":'13601'},{"host":'123.59.17.11',"port":'13601'}]
+            mybudget=myredis.getredis(redis_nodes)
+            return render_template('hdtmonitor.html',mybudget=mybudget)
         xvalue,dat,tmpsqllist=m.mydb(days,jobid)
         return render_template('hdtmonitor.html',xvalue=xvalue,mytitle=mytitle,data=dat,tmpsqllist=tmpsqllist)
 @app.route('/link/')
@@ -159,13 +169,70 @@ def hdtapi():
     else:
         jobid=request.form.get('jobid')
         cmd='''python D:\\work\\auto\\Voyager\\all_tests.py'''
+        cmdhdtui='''python D:\\work\\auto\\\Voyageractivity\\all_tests.py'''
         # cmd='''python all_tests.py'''
         if jobid=='100':
             try:
                 os.system(cmd)
+                data='调用测试环境apidisplay自动化测试case成功'
             except Exception as e:
                 print e.message
-        return render_template('allapi.html')
+                data=e.message
+        elif jobid=='200':
+            try:
+                os.system(cmdhdtui)
+                data='调用测试环境apidisplay自动化测试case成功'
+            except Exception as e:
+                print e.message
+                data=e.message
+        elif jobid=='300':
+            try:
+                # 调用接口执行国内生产环境自动化测试
+                r=requests.get('http://172.16.106.12:3333/auto/')
+                data=u'调用接口执行国内生产环境自动化测试成功'
+            except Exception as e:
+                print e.message
+                data=e.message
+        elif jobid=='400':
+            try:
+                # 调用接口执行国内生产环境自动化测试
+                r=requests.get('http://172.16.106.17:3333/auto/')
+                data=u'调用接口执行新加坡生产环境自动化测试成功'
+            except Exception as e:
+                print e.message
+                data=e.message
+        return render_template('allapi.html',data=data)
+@app.route('/myredis/',methods=('POST','GET'))
+def myredis():
+    if request.method=='GET':
+        return render_template('myredis.html')
+    else:
+        jobid1=request.form.get('jobid')
+        # mybudget=''
+        if jobid1=='120':
+            redis_nodes=[{"host":'123.59.17.118',"port":'13601'},{"host":'123.59.17.85',"port":'13601'},{"host":'123.59.17.11',"port":'13601'}]
+            # mybudget,allcount,negativecount=mr.mygetredis(redis_nodes)
+            # return render_template('myredis.html',mybudget=mybudget,allcount=allcount,negativecount=negativecount)
+        elif jobid1=='110':
+            redis_nodes=[{"host":'101.254.242.11',"port":'17001'},{"host":'101.254.242.12',"port":'17001'},{"host":'101.254.242.17',"port":'17001'}]
+        mybudget,allcount,negativecount=mr.mygetredis(redis_nodes)
+        return render_template('myredis.html',mybudget=mybudget,allcount=allcount,negativecount=negativecount)
+
+
+# @app.route('/baselogin',methods=('POST','GET'))
+# def baselogin():
+#     form=BaseLogin()
+#     #判断是否是验证提交
+#     if form.validate_on_submit():
+#         #跳转
+#         # flash(form.name.data+'|'+form.password.data+'|'+form.begintime.data)
+#         flash(form.name.data+'|'+form.password.data)
+#         # print form.name.data
+#         # print form.password.data
+#         return redirect(url_for('hdtapi'))
+#     else:
+#         #渲染
+#         return render_template('baselogin.html',form=form)
 
 if __name__ == '__main__':
     app.run( host="0.0.0.0",port=21312,debug=True)
