@@ -29,7 +29,7 @@
                 <td>地域</td>
                 <td>媒体id</td>
                 <td>站长id</td>
-                <td>状态</td>
+                <td title="1-有效点击 2-无效点击"><font color="red" >状态</font></td>
                 <td>adzone_click_id</td>
             </tr>
             {% for trcout in alladzon %}
@@ -49,7 +49,7 @@
                 <td>媒体id</td>
                 <td>ip</td>
                 <td>地域</td>
-                <td>奖品类型</td>
+                <td title="1-虚拟实物 2-实物 3-优惠券 4-其他 5-再抽一次 6-谢谢参与 7-幸运奖"><font color="red" >奖品类型</font></td>
                 <td>创意id</td>
                 <td>广告计划</td>
                 <!--<td>广告点击url</td>-->
@@ -75,6 +75,7 @@
                 <td>广告订单id</td>
                 <td>广告创意id</td>
                 <td>广告主id</td>
+                <td title="1 有效 2 无效"><font color="red" >状态</font></td>
             </tr>
             {% for trcout in allshow %}
             <tr>
@@ -98,8 +99,8 @@
                 <td>广告主id</td>
                 <!--<td>广告主id</td>-->
                 <td>出现次数</td>
-                <td>状态</td>
-                <td>点击来源</td>
+                 <td title="1 有效 2 无效"><font color="red" >状态</font></td>
+                <td title="0 我的奖励 1 获取广告弹层 2广告详情"><font color="red" >点击来源</font></td>
                 <td>无效原因</td>
                 <td>媒体收益 （单位：分）</td>
                 <td>平台溢价收益 （单位：分）</td>
@@ -112,6 +113,30 @@
             </tr>
             {% endfor %}
 
+         <tr><td><strong>award_show_click_log</strong></td></tr>
+            <tr>
+            <td>奖品id</td>
+            <td>活动id</td>
+            <td>广告位id</td>
+            <td>媒体id</td>
+            <!--<td>用户cookie</td>-->
+            <td>ip</td>
+            <td>地域</td>
+            <td>创建时间</td>
+            <td>广告位点击唯一id</td>
+            <td>奖品类型</td>
+             <td title="1-奖品展示  2-奖品点击"><font color="red" >数据类型</font></td>
+            <td title="1-有效点击 2-无效点击"><font color="red" >状态</font></td>
+            <td>数据无效原因</td>
+            <td>坑位id</td>
+        </tr>
+            {% for trcout in award_show %}
+            <tr>
+            {% for i in trcout %}
+                <td>{{i|safe}}</td>
+            {% endfor %}
+        </tr>
+            {% endfor %}
         </tbody>
     </table>
 </form>

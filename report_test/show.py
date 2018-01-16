@@ -11,6 +11,7 @@ import tuodi_day_order as myorder
 import hdtmonitor as m
 import hdt_cssc as cssc
 import myredis as mr
+import bidding_analysis as ba
 # import formclass.formonline as myclass
 # from formclass.formonline import *
 # from flask.ext.bootstrap import Bootstrap
@@ -160,7 +161,8 @@ def hdt_cssc():
         alllottery=cssc.mydata(days,dbtype,'lottery',adzone_click_id)
         allshow=cssc.mydata(days,dbtype,'show',adzone_click_id)
         allclick=cssc.mydata(days,dbtype,'click',adzone_click_id)
-        return render_template('hdt_cssc.html',alladzon=alladzon,alllottery=alllottery,allshow=allshow,allclick=allclick)
+        award_show=cssc.mydata(days,dbtype,'award_show',adzone_click_id)
+        return render_template('hdt_cssc.html',alladzon=alladzon,alllottery=alllottery,allshow=allshow,allclick=allclick,award_show=award_show)
 @app.route('/hdtapi/',methods=['GET','POST'])
 def hdtapi():
     if request.method=='GET':
@@ -218,6 +220,25 @@ def myredis():
         mybudget,allcount,negativecount=mr.mygetredis(redis_nodes)
         return render_template('myredis.html',mybudget=mybudget,allcount=allcount,negativecount=negativecount)
 
+@app.route('/voyagerlog/',methods=('POST','GET'))
+def voyagerlog():
+    zclk=request.form.get('zclk')
+    if request.method=='GET':
+        return render_template('voyagerlog.html')
+    else:
+        tmpdit=ba.orderbylognew(zclk)
+        print 99999999999999999999999
+        print tmpdit
+        # data=ba.getorderreson(tmplist)
+        tmpdata=[]
+        # tmpalldit={}
+        # for i in tmpdit:
+        #     for (j,k) in i.items():
+        #         tmpalldit[j]=eval(ba.getorderreson(k))
+        #     # tmpdata.append(tmpalldit)
+        # print "2333333333333333333333333333333337777777777777"
+        # print tmpalldit
+        return render_template('voyagerlog.html',data=tmpdit)
 
 # @app.route('/baselogin',methods=('POST','GET'))
 # def baselogin():
