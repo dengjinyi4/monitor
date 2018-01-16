@@ -95,8 +95,8 @@ def orderbylognew(zclk):
         #选出来的订单
         tmpwad=str(hit["_source"]["message"]).split("}, wad:")[1].split("'")[0]
         # print 77777777777777777777
-        print tmpwad
-        print 222222
+        # print tmpwad
+	# print 222222
         # 不出广告订单列表
         tmpdit=str(hit["_source"]["message"]).split("bid:")[1].split(", wad:")[0].split("fad:")[1]
         tmpdit=eval(tmpdit)
