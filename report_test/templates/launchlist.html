@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form action="{{url_for('launchlist')}}" method="post">
+    <table  border="1">
+        <tbody>
+            <tr>
+                <td>年：
+                <select name="year">
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                </select></td>
+                <td>月：<select name="month">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select></td>
+                <!--<td>请输入adzone_click_id:</td>-->
+                <!--<td><input name="adzone_click_id" type="search"></td>-->
+                <!--<td>N天之前 :</td>-->
+                <!--<td><input name="myday" type="number"></td>-->
+                <td><input type="submit" value="搜索"></td>
+            </tr>
+            <tr><td><strong>adzone_click_log</strong></td></tr>
+            <tr>
+                <td>id</td>
+                <td>group</td>
+                <td>status</td>
+                <td>project</td>
+                <td>src_version</td>
+                <td>Changes</td>
+                <!--<td title="1-有效点击 2-无效点击"><font color="red" >状态</font></td>-->
+                <td>createtime</td>
+                <td>updatetime</td>
+            </tr>
+            {% for trcout in result %}
+            <tr>
+                {% for i in trcout %}
+                    <td>{{i|safe}}</td>
+                {% endfor %}
+                    <td><a href="{{url_for('getlanuch',_external=True,id=trcout[0])}}">编辑</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+</body>
+</html>
