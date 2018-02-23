@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #encoding: utf-8
-from flask import Flask,jsonify,abort,Response
+from flask import Flask,jsonify,abort,Response,jsonify
 from flask import Flask,request,render_template,url_for,redirect,flash
 import requests
 import os,json,sys
@@ -12,6 +12,7 @@ import hdtmonitor as m
 import hdt_cssc as cssc
 import myredis as mr
 import bidding_analysis as ba
+import launchlistdb as lc
 # import formclass.formonline as myclass
 # from formclass.formonline import *
 # from flask.ext.bootstrap import Bootstrap
@@ -239,7 +240,42 @@ def voyagerlog():
         # print "2333333333333333333333333333333337777777777777"
         # print tmpalldit
         return render_template('voyagerlog.html',data=tmpdit)
-
+@app.route('/reportlist/',methods=('POST','GET'))
+def reportlist():
+    if request.method=='GET':
+        reportlist='''Report.html'''
+        return render_template(reportlist)
+# http://display.eqigou.com:21312/baidujs/
+@app.route('/baidujs/')
+@app.route('/1111/')
+def baidujs():
+    return render_template('baidujs.html')
+@app.route('/launchlist/',methods=['GET','POST'])
+def launchlist():
+    if request.method=='GET':
+        return render_template('launchlist.html')
+    else:
+        year=request.form.get('year')
+        month=request.form.get('month')
+        reslut=lc.getlanuchlist(int(year),int(month))
+        return render_template('launchlist.html',result=reslut)
+@app.route('/launchlistadd/')
+def launchlisadd():
+    group=request.args.get('group')
+    project=request.args.get('project')
+    src_version=request.args.get('src_version')
+    Changes=request.args.get('Changes')
+    tmpsql=lc.lanuchlisttmpsql(group,project,src_version,Changes)
+    try:
+        lc.instertsql(tmpsql)
+        return jsonify({'code':200})
+    except:
+        return jsonify({'code':500})
+@app.route('/getlanuch/')
+def getlanuch():
+    id=request.args.get('id')
+    reslut=lc.getlanuch(id)
+    return render_template('launchdetial.html',result=reslut)
 # @app.route('/baselogin',methods=('POST','GET'))
 # def baselogin():
 #     form=BaseLogin()

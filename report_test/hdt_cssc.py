@@ -19,9 +19,11 @@ def tmpsqllist(days,type,adzone_click_id):
     elif type=='lottery':
         tmpsql="SELECT award_id,order_id,act_id,adzone_id,media_id,ip,region,act_award_type,ad_creative_id,plan_id,award_name,choosen_tag,advertiser_id from voyagerlog.lottery_click_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
     elif type=='show':
-        tmpsql="SELECT ad_choosen_tag,media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,advertiser_id from voyagerlog.ad_show_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
+        tmpsql="SELECT ad_choosen_tag,media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,advertiser_id,status from voyagerlog.ad_show_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
     elif type=='click':
         tmpsql="SELECT media_id,adzone_id,act_id,position_id,ad_plan_id,ad_order_id,ad_creative_id,charge_amount,advertiser_id,occurrence,status,click_source,invalid_message,media_income,system_income from voyagerlog.ad_click_log"+day+" where adzone_click_id='"+adzone_click_id+"'"
+    elif type=='award_show':
+        tmpsql="SELECT award_id,act_id,adzone_id,media_id,ip,region,create_time,adzone_click_id,act_award_type,log_type,status,invalid_message,position_id from  award_show_click_log   where adzone_click_id='"+adzone_click_id+"'"
     # tmpsqllist.append(tmpsql)
     print tmpsql
     return tmpsql
@@ -42,16 +44,22 @@ def mydata(days,dbtype,tabletype,adzone_click_id):
     c.close()
     return result
     # return '111'
-if __name__ == '__main__':
-    myc=mycursor('test1')
-    sql=r"SELECT create_time  from voyagerlog.lottery_click_log20171121 where adzone_click_id='B0H2DDC11HKH9UK4N6';"
+def diffcreatetime():
+    myc=mycursor('test')
+    sql=r"SELECT create_time  from voyagerlog.lottery_click_log20180103 where adzone_click_id='B3W1CD6H1HP85Z4UM9'"
     myc.execute(sql)
     re=myc.fetchall()
+    print re
     count=[]
     for i in range(1,len(re)):
         a=re[i][0]-re[i-1][0]
         count.append(a.seconds)
     print count
+    return 1
+if __name__ == '__main__':
+    allshow=mydata(0,'test1','show','B0H2UDC01HUQSECAN5')
+    print type(allshow)
+    print allshow
     # print count[0].seconds
     # print len(re)
     # print type(re[1][0])
